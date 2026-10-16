@@ -22,7 +22,7 @@ def test_creation_d_un_trajet(db):
     assert trajet.prix_places
 
 
-def test_doit_avoire_au_moins_une_place():
+def test_doit_avoire_au_moins_une_place(db):
 
     with pytest.raises(Exception):  # noqa: B017
         Trajet.objects.create(
@@ -38,7 +38,7 @@ def test_doit_avoire_au_moins_une_place():
        
 
 
-def test_trajet_affichage():
+def test_trajet_affichage(db):
     trajet = Trajet.objects.create(
         conducteur="Steph",
         ville_depart="Sokode",
