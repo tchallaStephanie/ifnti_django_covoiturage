@@ -24,8 +24,8 @@ def test_creation_d_un_trajet(db):
 
 def test_doit_avoire_au_moins_une_place(db):
 
-    with pytest.raises(Exception):  # noqa: B017
-        Trajet.objects.create(
+    with pytest.raises(Exception):
+        trajet=Trajet.objects.create(
             conducteur="Steph",
             ville_depart="Sokode",
             ville_arrivee="Lome",
@@ -34,6 +34,7 @@ def test_doit_avoire_au_moins_une_place(db):
             places=0,
             prix_places=3000,
         )
+        trajet.clean_fields()
 
        
 
@@ -48,5 +49,4 @@ def test_trajet_affichage(db):
         places=4,
         prix_places=3000,
     )
-
-    assert str(trajet) == "Sokode -> Lome, le 14/11/2026 a 07:00"
+    assert str(trajet) == "Sokode -> Lome, le 2026-11-14 a 07:00"
