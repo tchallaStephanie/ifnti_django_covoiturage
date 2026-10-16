@@ -7,7 +7,7 @@ def test_creation_d_un_trajet(db):
             ville_depart="Sokode",
             ville_arrivee="Lome",
             date_depart="2026-10-17",
-            heur_depart="18:00",
+            heure_depart="18:00",
             places=4,
             prix_places=3000,
         )
@@ -15,7 +15,7 @@ def test_creation_d_un_trajet(db):
     assert trajet.ville_depart
     assert trajet.ville_arrivee
     assert trajet.date_depart
-    assert trajet.heur_depart
+    assert trajet.heure_depart
     assert trajet.places
     assert trajet.prix_places
 
