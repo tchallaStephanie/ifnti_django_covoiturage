@@ -1,6 +1,6 @@
 import pytest
 
-from covoiturage.models import Trajet
+from covoiturage.models import Reservation, Trajet
 
 
 def test_creation_d_un_trajet(db):
@@ -50,3 +50,22 @@ def test_trajet_affichage(db):
     )
 
     assert str(trajet) == "Sokode -> Lome, le 14/11/2026 a 07:00"
+
+
+
+def test_reservation_porte_sur_un_trajet(db):
+    reservation = Reservation.objects.create(
+        nom_passager="Stephanie",
+        nombre_de_places=3,
+    )
+    assert reservation.nom_passager
+    assert reservation.nombre_de_places
+
+
+def test_affichage_reservation(db):
+    reservation = Reservation.objects.create(
+        nom_passager="Stephanie1",
+        nombre_de_places=2,
+    )   
+
+    assert str(reservation) == "Stephanie1 : 2 places"
