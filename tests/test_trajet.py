@@ -9,13 +9,29 @@ def trajet_sokode_lome(db):
             conducteur="Steph",
             ville_depart="Sokode",
             ville_arrivee="Lome",
-            date_depart="2026-10-17",
+            date_depart="2027-10-17",
             heure_depart="18:00",
             places=4,
             prix_places=3000,
         )
 
     return trajet
+
+
+@pytest.fixture
+def trajet_sokode_lome_passee(db):
+    trajet = Trajet.objects.create(
+            conducteur="Steph_passee",
+            ville_depart="Sokode",
+            ville_arrivee="Lome",
+            date_depart="2000-02-01",
+            heure_depart="18:00",
+            places=4,
+            prix_places=3000,
+        )
+
+    return trajet
+
 
 def test_creation_d_un_trajet(db, trajet_sokode_lome):
     
@@ -94,3 +110,38 @@ def test_reservation_une_fois_le_meme_trajet(db, trajet_sokode_lome):
             nombre_de_places=3,
             trajet=trajet3
         )   
+
+
+
+def test_liste_des_trajets_ne_montre_que_les_trajets_a_venir(db, client, trajet_sokode_lome, trajet_sokode_lome_passee):
+    
+    response = client.get("/trajets")
+
+
+    assert "Steph" in response.text
+    assert "Sokode" in response.text
+    assert "Lome" in response.text
+    assert "2026-11-14" in response.text
+    assert "07:00" in response.text 
+    assert "4" in response.text
+    assert "3000" in response.text  
+
+   
+     
+    assert "steph_passee" not in response.text
+    assert "Sokode" not in response.text
+    assert "Lome" not in response.text
+    assert "2000-02-01" not in response.text 
+    assert "07:00" not in response.text
+    assert "4" not in response.text
+    assert "3000" not in response.text 
+
+
+    
+
+    
+
+    
+
+
+
