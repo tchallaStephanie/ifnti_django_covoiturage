@@ -3,7 +3,8 @@ import pytest
 from covoiturage.models import Reservation, Trajet
 
 
-def test_creation_d_un_trajet(db):
+@pytest.fixture
+def trajet_sokode_lome(db):
     trajet = Trajet.objects.create(
             conducteur="Steph",
             ville_depart="Sokode",
@@ -13,13 +14,18 @@ def test_creation_d_un_trajet(db):
             places=4,
             prix_places=3000,
         )
-    assert trajet.conducteur
-    assert trajet.ville_depart
-    assert trajet.ville_arrivee
-    assert trajet.date_depart
-    assert trajet.heure_depart
-    assert trajet.places
-    assert trajet.prix_places
+
+    return trajet
+
+def test_creation_d_un_trajet(db, trajet_sokode_lome):
+    
+    assert trajet_sokode_lome.conducteur
+    assert trajet_sokode_lome.ville_depart
+    assert trajet_sokode_lome.ville_arrivee
+    assert trajet_sokode_lome.date_depart
+    assert trajet_sokode_lome.heure_depart
+    assert trajet_sokode_lome.places
+    assert trajet_sokode_lome.prix_places
 
 
 def test_doit_avoire_au_moins_une_place(db):
@@ -38,36 +44,17 @@ def test_doit_avoire_au_moins_une_place(db):
        
 
 
-def test_trajet_affichage(db):
-    trajet = Trajet.objects.create(
-        conducteur="Steph",
-        ville_depart="Sokode",
-        ville_arrivee="Lome",
-        date_depart="2026-11-14",
-        heure_depart="07:00",
-        places=4,
-        prix_places=3000,
-    )
-
-    assert str(trajet) == "Sokode -> Lome, le 14/11/2026 a 07:00"
+def test_trajet_affichage(db, trajet_sokode_lome):
+   
+    assert str(trajet_sokode_lome) == "Sokode -> Lome, le 14/11/2026 a 07:00"
 
 
 
-def test_reservation_porte_sur_un_trajet(db):
-    trajet1 = Trajet.objects.create(
-        conducteur="Steph",
-        ville_depart="Sokode",
-        ville_arrivee="Lome",
-        date_depart="2026-11-14",
-        heure_depart="07:00",
-        places=4,
-        prix_places=3000,
-    )
-    trajet1 = Trajet.objects.get(id=1)
+def test_reservation_porte_sur_un_trajet(db, trajet_sokode_lome):
     reservation = Reservation.objects.create(
         nom_passager="Stephanie",
         nombre_de_places=3,
-        trajet=trajet1
+        trajet=trajet_sokode_lome
     )
     assert reservation.nom_passager
     assert reservation.nombre_de_places
@@ -79,21 +66,11 @@ def test_affichage_reservation(db):
         nom_passager="Stephanie1",
         nombre_de_places=2,
     )   
-
     assert str(reservation) == "Stephanie1 : 2 places"
 
 
-def test_reservation_une_fois_le_meme_trajet(db):
+def test_reservation_une_fois_le_meme_trajet(db, trajet_sokode_lome):
     with pytest.raises(Exception):  # noqa: B017
-        trajet2 = Trajet.objects.create(
-            conducteur="Steph1",
-            ville_depart="Sokode",
-            ville_arrivee="Lome",
-            date_depart="2026-11-14",
-            heure_depart="07:00",
-            places=4,
-            prix_places=3000,
-        )
 
         trajet3 = Trajet.objects.create(
             conducteur="Steph1",
@@ -108,7 +85,7 @@ def test_reservation_une_fois_le_meme_trajet(db):
         Reservation.objects.create(
             nom_passager="Stephanie1",
             nombre_de_places=2,
-            trajet=trajet2
+            trajet=trajet_sokode_lome
 
         )   
 
