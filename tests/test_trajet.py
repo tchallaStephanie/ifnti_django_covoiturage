@@ -94,6 +94,16 @@ def test_reservation_une_fois_le_meme_trajet(db):
             places=4,
             prix_places=3000,
         )
+
+        trajet3 = Trajet.objects.create(
+            conducteur="Steph1",
+            ville_depart="Sokode",
+            ville_arrivee="Lome",
+            date_depart="2026-11-14",
+            heure_depart="07:00",
+            places=4,
+            prix_places=3000,
+        )
             
         Reservation.objects.create(
             nom_passager="Stephanie1",
@@ -105,5 +115,5 @@ def test_reservation_une_fois_le_meme_trajet(db):
         Reservation.objects.create(
             nom_passager="Stephanie1",
             nombre_de_places=3,
-            trajet=trajet2
+            trajet=trajet3
         )   
