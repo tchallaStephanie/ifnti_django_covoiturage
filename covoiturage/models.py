@@ -14,4 +14,14 @@ class Trajet(models.Model):
     def __str__(self):
         return f"{self.ville_depart} -> {self.ville_arrivee}, le {self.date_depart} a {self.heure_depart}"
 
-        
+
+
+
+class Reservation(models.Model):
+    nom_passager=models.CharField(max_length=100)
+    nombre_de_places=models.IntegerField()
+    trajet=models.ForeignKey(Trajet, on_delete=models.CASCADE)
+
+    
+    def __str__(self):
+        return f"{self.nom_passager} : {self.nombre_de_places} places"    
